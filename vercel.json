@@ -1,4 +1,8 @@
 {
   "cleanUrls": true,
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "functions": {
+    "api/playlist.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
 }
