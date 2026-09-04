@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.tvhub.app-mergeDebugResources-28:/values-v24/values-v24.xml",
+            "map": [
+                {
+                    "source": "/Users/simaogabrielpes/.gradle/caches/8.11.1/transforms/9b414e5025b362aed5b63531e27f2b46/transformed/appcompat-1.7.0/res/values-v24/values-v24.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,212",
+                        "endColumns": "156,134",
+                        "endOffsets": "207,342"
+                    }
+                },
+                {
+                    "source": "/Users/simaogabrielpes/.gradle/caches/8.11.1/transforms/0a9a50f4285017d8de7b21b126afcf84/transformed/media-1.7.0/res/values-v24/values-v24.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,121,182,248",
+                        "endColumns": "65,60,65,66",
+                        "endOffsets": "116,177,243,310"
+                    },
+                    "to": {
+                        "startLines": "4,5,6,7",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "347,413,474,540",
+                        "endColumns": "65,60,65,66",
+                        "endOffsets": "408,469,535,602"
+                    }
+                }
+            ]
+        }
+    ]
+}

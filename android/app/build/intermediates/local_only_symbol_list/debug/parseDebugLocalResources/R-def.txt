@@ -1,0 +1,8 @@
+R_DEF: Internal format may change without notice
+local
+color tvhub_accent
+color tvhub_background
+color tvhub_muted
+color tvhub_panel
+color tvhub_text
+style AppTheme

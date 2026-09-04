@@ -1,0 +1,7 @@
+<resources>
+    <color name="tvhub_background">#080B0D</color>
+    <color name="tvhub_panel">#111619</color>
+    <color name="tvhub_accent">#C8F36B</color>
+    <color name="tvhub_text">#F2F5F3</color>
+    <color name="tvhub_muted">#899393</color>
+</resources>

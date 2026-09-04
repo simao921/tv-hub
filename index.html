@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0d0f">
+  <meta name="description" content="TV Hub - os teus canais, num só lugar.">
+  <title>TV Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <a class="brand" href="#inicio" data-nav="inicio" aria-label="TV Hub, início"><span class="brand-mark">TV</span><span>HUB</span></a>
+      <nav class="main-nav">
+        <a class="nav-link active" href="#inicio" data-nav="inicio"><span class="nav-icon">⌂</span><span>Início</span></a>
+        <a class="nav-link" href="#ao-vivo" data-nav="ao-vivo"><span class="nav-icon">◉</span><span>TV ao vivo</span></a>
+        <a class="nav-link" href="#favoritos" data-nav="favoritos"><span class="nav-icon">♡</span><span>Favoritos</span><span class="count-badge" id="favoriteCount">0</span></a>
+        <a class="nav-link" href="#pesquisa" data-nav="pesquisa"><span class="nav-icon">⌕</span><span>Pesquisa</span></a>
+      </nav>
+      <div class="category-nav" id="categoryNav" hidden>
+        <div class="nav-label">Categorias</div>
+        <div id="categoryLinks"></div>
+      </div>
+      <div class="channel-sidebar" id="channelSidebar" hidden>
+        <div class="nav-label">Canais</div>
+        <div id="channelLinks"></div>
+      </div>
+      <div class="sidebar-footer"><span class="status-dot"></span><span id="playlistStatus">Nenhuma playlist</span></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu icon-button" id="mobileMenu" aria-label="Abrir menu">☰</button>
+        <div class="breadcrumb"><span class="eyebrow">TV HUB</span><span class="breadcrumb-separator">/</span><span id="pageTitle">Início</span></div>
+        <div class="top-actions">
+          <label class="search-box" for="searchInput"><span>⌕</span><input id="searchInput" type="search" placeholder="Procurar canais..." autocomplete="off"></label>
+          <button class="icon-button" id="openPlaylistTop" aria-label="Carregar playlist" title="Carregar playlist">＋</button>
+        </div>
+      </header>
+
+      <section class="view active" id="homeView" data-view="inicio">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <div class="live-kicker"><span class="live-pulse"></span> A tua televisão, organizada</div>
+            <h1>Os teus canais,<br><em>num só lugar.</em></h1>
+            <p>Uma experiência simples para acompanhar a tua playlist autorizada em qualquer ecrã.</p>
+            <button class="primary-button" id="openPlaylist"><span>＋</span> Carregar playlist</button>
+          </div>
+          <div class="hero-orbit" aria-hidden="true"><div class="orbit-ring ring-one"></div><div class="orbit-ring ring-two"></div><div class="orbit-core"><span>TV</span><small>HUB</small></div><div class="orbit-spark spark-one"></div><div class="orbit-spark spark-two"></div></div>
+        </div>
+        <div class="stat-row"><div class="stat-item"><strong id="channelStat">0</strong><span>Canais</span></div><div class="stat-item"><strong id="favoriteStat">0</strong><span>Favoritos</span></div><div class="stat-item"><strong id="categoryStat">0</strong><span>Categorias</span></div></div>
+        <div class="section-heading"><div><span class="section-kicker">A tua seleção</span><h2>Explorar canais</h2></div><button class="text-button" data-nav="ao-vivo">Ver todos <span>→</span></button></div>
+        <div class="empty-state" id="homeEmpty"><div class="empty-art">▤</div><h3>A tua programação começa aqui</h3><p>Carrega uma playlist M3U através de URL para começares a ver os teus canais.</p><button class="secondary-button" id="openPlaylistEmpty">Carregar playlist</button></div>
+        <div class="channel-grid" id="homeGrid"></div>
+      </section>
+
+      <section class="view" id="liveView" data-view="ao-vivo"><div class="view-heading"><div><span class="section-kicker">Agora disponível</span><h2>TV ao vivo</h2></div><span class="result-count" id="liveResultCount">0 canais</span></div><div class="empty-state compact" id="liveEmpty"><div class="empty-art">◉</div><h3>Nenhum canal carregado</h3><p>Adiciona uma playlist M3U autorizada para veres os teus canais aqui.</p><button class="secondary-button" id="openPlaylistLive">Carregar playlist</button></div><div class="channel-grid" id="liveGrid"></div></section>
+      <section class="view" id="favoritesView" data-view="favoritos"><div class="view-heading"><div><span class="section-kicker">A tua lista pessoal</span><h2>Favoritos</h2></div><span class="result-count" id="favoriteResultCount">0 canais</span></div><div class="empty-state compact" id="favoritesEmpty"><div class="empty-art">♡</div><h3>Ainda não tens favoritos</h3><p>Marca os canais que mais gostas para os encontrares rapidamente.</p></div><div class="channel-grid" id="favoritesGrid"></div></section>
+      <section class="view" id="searchView" data-view="pesquisa"><div class="view-heading"><div><span class="section-kicker">Encontra rapidamente</span><h2>Pesquisa</h2></div><span class="result-count" id="searchResultCount">0 resultados</span></div><div class="large-search"><span>⌕</span><input id="largeSearchInput" type="search" placeholder="Nome do canal ou categoria..." autocomplete="off"></div><div class="empty-state compact" id="searchEmpty"><div class="empty-art">⌕</div><h3>Pesquisa na tua programação</h3><p>Escreve o nome de um canal ou categoria para veres resultados.</p></div><div class="channel-grid" id="searchGrid"></div></section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="playlistModal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="playlistModalTitle"><button class="modal-close icon-button" data-close-modal aria-label="Fechar">×</button><div class="modal-icon">↗</div><span class="section-kicker">Fonte da programação</span><h2 id="playlistModalTitle">Carregar playlist M3U</h2><p>Usa um URL ou escolhe um ficheiro M3U autorizado.</p><form id="playlistForm"><label for="playlistUrl">URL da playlist</label><input id="playlistUrl" type="url" placeholder="https://exemplo.com/a-tua-playlist.m3u"><label for="playlistFile">Ficheiro M3U</label><input id="playlistFile" type="file" accept=".m3u,.m3u8,audio/x-mpegurl,application/vnd.apple.mpegurl"><div class="form-error" id="formError" role="alert"></div><button class="primary-button full-width" type="submit" id="loadButton"><span>↓</span> Carregar playlist</button></form><small class="modal-note">A playlist local é lida no dispositivo e não é enviada para a Internet.</small></div></div>
+
+  <div class="player-overlay" id="playerOverlay" hidden><button class="player-back icon-button" id="closePlayer" aria-label="Voltar">←</button><div class="player-stage"><video id="videoPlayer" controls playsinline></video><div class="player-message" id="playerMessage" hidden><div class="player-message-icon">!</div><h3>Não foi possível reproduzir</h3><p>Este formato pode não ser suportado pelo navegador ou WebView. Tenta outro canal ou verifica a origem da playlist.</p></div><div class="player-loading" id="playerLoading"><span class="spinner"></span><span>A preparar o canal...</span></div></div><div class="player-info"><div class="player-logo" id="playerLogo">TV</div><div><span class="section-kicker" id="playerCategory">TV ao vivo</span><h2 id="playerTitle">Canal</h2></div><button class="secondary-button player-favorite" id="playerFavorite">♡ Favorito</button></div></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
