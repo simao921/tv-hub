@@ -4,7 +4,7 @@
   "private": true,
   "description": "TV Hub com backend local para playlists M3U autorizadas",
   "scripts": {
-    "start": "node server.js"
+    "start": "node local/server.js"
   },
   "engines": {
     "node": "20.x"
