@@ -5,7 +5,7 @@
 O servidor não inclui canais, listas, credenciais ou streams. Inicia-o numa máquina ligada à mesma rede Wi-Fi/Ethernet das boxes:
 
 ```bash
-npm start
+node local/server.js
 ```
 
 Depois abre nas boxes `http://IP-DA-MAQUINA:8787`, substituindo `IP-DA-MAQUINA` pelo endereço local dessa máquina (por exemplo, `192.168.1.20`). O firewall deve permitir ligações TCP na porta `8787`.
