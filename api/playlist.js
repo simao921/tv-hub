@@ -1,4 +1,6 @@
 const dns = require('dns').promises;
+const http = require('http');
+const https = require('https');
 const { URL } = require('url');
 
 const blockedGroups = /adult|adulto|18\+|porn|sex/i;
@@ -43,6 +45,26 @@ function parseM3U(text) {
   return channels;
 }
 
+function parseRequestBody(body) {
+  if (!body) return {};
+  if (typeof body === 'string') {
+    try {
+      return JSON.parse(body || '{}');
+    } catch {
+      return {};
+    }
+  }
+  if (Buffer.isBuffer(body)) {
+    try {
+      return JSON.parse(body.toString('utf8') || '{}');
+    } catch {
+      return {};
+    }
+  }
+  if (typeof body === 'object') return body;
+  return {};
+}
+
 async function isPublicUrl(value) {
   const target = new URL(value);
   if (!['http:', 'https:'].includes(target.protocol)) return false;
@@ -50,17 +72,51 @@ async function isPublicUrl(value) {
   return records.every(({ address }) => !/^(0\.0\.0\.0|127\.|10\.|192\.168\.|169\.254\.)/.test(address) && address !== '::1' && !address.startsWith('fc') && !address.startsWith('fe80:'));
 }
 
+function fetchText(url, timeoutMs = 20000) {
+  return new Promise((resolve, reject) => {
+    const target = new URL(url);
+    const client = target.protocol === 'https:' ? https : http;
+    const req = client.get(target, { headers: { 'User-Agent': 'TV-Hub/1.0' } }, (res) => {
+      const statusCode = res.statusCode || 0;
+      const location = res.headers.location;
+      if ([301, 302, 303, 307, 308].includes(statusCode) && location) {
+        const redirectUrl = new URL(location, target).toString();
+        resolve(fetchText(redirectUrl, timeoutMs));
+        return;
+      }
+
+      let body = '';
+      res.setEncoding('utf8');
+      res.on('data', chunk => { body += chunk; });
+      res.on('end', () => {
+        if (statusCode >= 400) {
+          reject(new Error(`A origem respondeu com HTTP ${statusCode}.`));
+          return;
+        }
+        resolve(body);
+      });
+    });
+
+    req.setTimeout(timeoutMs, () => {
+      req.destroy(new Error('Tempo limite excedido ao abrir a playlist.'));
+    });
+
+    req.on('error', reject);
+  });
+}
+
 module.exports = async function playlist(request, response) {
   if (request.method !== 'POST') return response.status(405).json({ error: 'Método não suportado.' });
+
   try {
-    const { url } = typeof request.body === 'string' ? JSON.parse(request.body || '{}') : request.body || {};
+    const { url } = parseRequestBody(request.body);
     if (typeof url !== 'string' || !await isPublicUrl(url)) {
       return response.status(400).json({ error: 'Indica um URL HTTP(S) público de uma playlist autorizada.' });
     }
-    const upstream = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(20000) });
-    if (!upstream.ok) throw new Error(`A origem respondeu com HTTP ${upstream.status}.`);
-    const text = await upstream.text();
+
+    const text = await fetchText(url, 20000);
     if (text.length > 30 * 1024 * 1024) throw new Error('A playlist excede o limite de 30 MB.');
+
     return response.status(200).json({ channels: parseM3U(text) });
   } catch (error) {
     return response.status(400).json({ error: error.message || 'Não foi possível ler a playlist.' });
